@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Blogpost{% endblock title %}
+
+{% block body %}
+<div class="container my-3">
+<div class="blog-post">
+
+    {% for i in post %}
+        <h2 class="blog-post-title">{{i.title}}</h2>
+        <p class="blog-post-meta">{{i.timeStamp}}  <a href="#">{{i.author}}</a></p>
+
+        <p>{{i.content}}</p>
+        <hr>
+     <div class="my-2">
+    {% if user.is_authenticated %}
+    <form action="{{i.slug}}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="exampleInputEmail1">Post Comment </label>
+            <input type="text" class="form-control" name="comment" placeholder="Enter comment here" required>
+        </div>
+        <input type="hidden" name="postSno" value="{{i.sno}}">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% else %}
+    Please login to post a comment
+    {% endif %}
+            <h2> Comments ({{count}})</h2>
+        {% for comment in comments %}
+
+    <div class="row my-3">
+        <div class="col-md-1  ">
+        <img class="rounded mx-auto d-block w-100 p-2" src="/static/user-1808597_960_720.png"  alt="user">
+        </div>
+        <div class="col-md-11 ">
+        <b> {{comment.user.username}} </b> at {{comment.timestamp}}
+        <div>   {{comment.comment}} </div>
+    </div>
+    </div>
+    {% endfor %}
+    {% endfor %}
+
+
+
+      </div>
+      </div>
+ {% endblock %}
